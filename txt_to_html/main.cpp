@@ -10,15 +10,48 @@ int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
-    QFile old_file("e:\\ProjectX\\Game.txt");
-    QFile new_file("e:\\ProjectX\\Game.html");
-    new_file.open(QIODevice::WriteOnly);
+    QFile old_file("e:\\ProjectX\\4312.htm");
+    QFile new_file("e:\\ProjectX\\Games.htm");
+    QString str;
+
+
+
+
     old_file.open(QIODevice::ReadOnly);
+    new_file.open(QIODevice::WriteOnly);
     QTextStream str_old_file(&old_file);
     QTextStream str_new_file(&new_file);
 
-    str_new_file<<str_old_file.readLine();
+    while(!str_old_file.atEnd())
+    {
+        str=str_old_file.readLine();
+        if(str.contains("<H1>"))
+        {
+            str_new_file<<str.replace(QString("Hello, world!"),QString("ACROSTROX"));
+            str=str_old_file.readLine();
+            str_new_file<<str.replace(3,str.length()-3,"WIN for YOU");
+            str=str_old_file.readLine();
+            while(!str.contains("/P"))
+            {
+               str_new_file<<str.replace(0,str.length(),"");
+               str=str_old_file.readLine();
+            }
+            str_new_file<<str.replace(0,str.indexOf("</P>"),"");
 
+           // str=str_old_file.readLine();
+            //str_new_file<<str.replace(0,str.length()-str.indexOf("</P>"),"2");
+
+           // str_new_file<<str_old_file.readLine();//.replace(str.indexOf("<P>")+3,str.length()-7,"asad");
+            continue;
+        }
+       // if(str.contains("<H1>"))
+        else
+        {
+            str_new_file<<str;
+            str_new_file<<"\n";
+        }
+    }
+    qDebug()<<"ad";
     new_file.close();
     old_file.close();
 
