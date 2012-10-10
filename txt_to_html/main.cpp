@@ -11,20 +11,22 @@ int main(int argc, char *argv[])
     QCoreApplication a(argc, argv);
 
     QFile old_file("e:\\ProjectX\\4312.htm");
-    QFile new_file("e:\\ProjectX\\Games.htm");
+    QFile main_file("e:\\ProjectX\\Game.txt");
+    QFile new_file("e:\\ProjectX\\WebPage.htm");
     QString str;
 
 
-
-
     old_file.open(QIODevice::ReadOnly);
+    main_file.open(QIODevice::ReadOnly);
     new_file.open(QIODevice::WriteOnly);
     QTextStream str_old_file(&old_file);
+    QTextStream str_main_file(&main_file);
     QTextStream str_new_file(&new_file);
 
     while(!str_old_file.atEnd())
     {
         str=str_old_file.readLine();
+        //добавление названия проекта, пояснения к нему
         if(str.contains("<H1>"))
         {
             str_new_file<<str.replace(QString("Hello, world!"),QString("ACROSTROX"));
@@ -37,14 +39,23 @@ int main(int argc, char *argv[])
                str=str_old_file.readLine();
             }
             str_new_file<<str.replace(0,str.indexOf("</P>"),"");
-
-           // str=str_old_file.readLine();
-            //str_new_file<<str.replace(0,str.length()-str.indexOf("</P>"),"2");
-
-           // str_new_file<<str_old_file.readLine();//.replace(str.indexOf("<P>")+3,str.length()-7,"asad");
-            continue;
+         continue;
         }
-       // if(str.contains("<H1>"))
+        else if(str.contains("<H2>"))
+        {
+            str_new_file<<str.replace(QString("Heading"),str_main_file.readLine());
+            str=str_old_file.readLine();
+            str_new_file<<str.replace(3,str.length()-3,str_main_file.readAll());
+            str=str_old_file.readLine();
+            while(!str.contains("/P"))
+            {
+               str_new_file<<str.replace(0,str.length(),"");
+               str=str_old_file.readLine();
+            }
+            str_new_file<<str.replace(0,str.indexOf("</P>"),"");
+         continue;
+        }
+       //добавление остального текста
         else
         {
             str_new_file<<str;
@@ -56,7 +67,7 @@ int main(int argc, char *argv[])
     old_file.close();
 
 
-
+   // qDebug()<<str_main_file.readAll();
     /*QFile my_file("e:\\ProjectX\\Game.txt");
     QFile mf("e:\\ProjectX\\123.txt");
     mf.open(QIODevice::WriteOnly);
