@@ -4,48 +4,39 @@
 #include <QFile>
 #include <QTextStream>
 #include <QString>
+#include <QStringList>
 #include <QDebug>
 
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
-    QFile old_file("e:\\ProjectX\\4312.htm");
-    QFile main_file("e:\\ProjectX\\Game.txt");
-    QFile new_file("e:\\ProjectX\\WebPage.htm");
+
+    QStringList strlst=a.arguments();
+    if(strlst.count()<5)
+    {
+    QFile old_file(strlst[3]);
+    QFile main_file(strlst[1]);
+    QFile new_file(strlst[2]);
     QString str;
-
-
     old_file.open(QIODevice::ReadOnly);
     main_file.open(QIODevice::ReadOnly);
     new_file.open(QIODevice::WriteOnly);
     QTextStream str_old_file(&old_file);
     QTextStream str_main_file(&main_file);
     QTextStream str_new_file(&new_file);
-
+    bool add_t=true;
     while(!str_old_file.atEnd())
     {
         str=str_old_file.readLine();
+        if(str.indexOf("<HR>")!=-1) add_t=true;
         //добавление названия проекта, пояснения к нему
         if(str.contains("<H1>"))
         {
-            str_new_file<<str.replace(QString("Hello, world!"),QString("ACROSTROX"));
+            str_new_file<<str.replace(QString("Hello, world!"),QString("ACROSTROX: The Game"));
             str=str_old_file.readLine();
-            str_new_file<<str.replace(3,str.length()-3,"WIN for YOU");
-            str=str_old_file.readLine();
-            while(!str.contains("/P"))
-            {
-               str_new_file<<str.replace(0,str.length(),"");
-               str=str_old_file.readLine();
-            }
-            str_new_file<<str.replace(0,str.indexOf("</P>"),"");
-         continue;
-        }
-        else if(str.contains("<H2>"))
-        {
-            str_new_file<<str.replace(QString("Heading"),str_main_file.readLine());
-            str=str_old_file.readLine();
-            str_new_file<<str.replace(3,str.length()-3,str_main_file.readAll());
+            str_new_file<<str.replace(3,str.length()-3,"<H2>"+str_main_file.readLine()+"</H2>");
+            str_new_file<<str_main_file.readAll();
             str=str_old_file.readLine();
             while(!str.contains("/P"))
             {
@@ -53,54 +44,31 @@ int main(int argc, char *argv[])
                str=str_old_file.readLine();
             }
             str_new_file<<str.replace(0,str.indexOf("</P>"),"");
-         continue;
+           add_t=false;
+            continue;
         }
        //добавление остального текста
         else
         {
+            if(add_t)
+            {
+                if(str.indexOf("Company 2012")==-1)
             str_new_file<<str;
+                else
+                    str_new_file<<str.replace("Company 2012","Company of Heroes");
             str_new_file<<"\n";
+            }
         }
     }
-    qDebug()<<"ad";
     new_file.close();
     old_file.close();
-
-
-   // qDebug()<<str_main_file.readAll();
-    /*QFile my_file("e:\\ProjectX\\Game.txt");
-    QFile mf("e:\\ProjectX\\123.txt");
-    mf.open(QIODevice::WriteOnly);
-    my_file.open(QIODevice::ReadWrite);
-    char *ch=new char;
-    //setlocale(LC_ALL,"Russian");
-    int i=10;
-
-
-
-
-    //qDebug()<<sq;
-    std::fstream fs;
-   // fs.open("e:\\ProjectX\\Game.txt",QIODevice::ReadWrite);
-    QTextStream sd(&my_file);
-    QTextStream ds(&mf);
-
-    ds<<sd.readLine();
-    while(!sd.atEnd())
-    {
-    sd>>ch;
-
-
-   // ch=sd.readAll().data();
-    //QStringList qs;
-    //sq=sd.read(1).data();
-   // printf(sd.read(1).data());
-   // std::cout<<sd.read(1).data();
-    std::cout<<ch;
-
+    qDebug()<<"File "+strlst[1]+" is creating";
 }
+    else qDebug()<<"Bad value.";
 
-    my_file.close();
-    mf.close();*/
+
+\
+\
+
     return a.exec();
 }
