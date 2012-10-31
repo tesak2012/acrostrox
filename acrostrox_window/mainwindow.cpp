@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "QDesktopWidget"
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -13,6 +14,9 @@ MainWindow::MainWindow(QWidget *parent) :
     button->setFlat(true);
     button->setStyleSheet("font: 75 16pt \"Tekton Pro Ext\"");
     connect(button,SIGNAL(clicked()),this, SLOT(close()));
+    ui->picture_bad->setPixmap(QPixmap("Bad.png"));
+     ui->picture_good->setPixmap(QPixmap("Good.png"));
+      ui->picture_name->setPixmap(QPixmap("ACROSTROX.png"));
    ui->verticalLayout->addWidget(button);
   // ui->verticalLayout->setContentsMargins(QApplication::desktop()->screenGeometry().width()/9,0,QApplication::desktop()->screenGeometry().width()/9,0);
    ui->verticalLayout->setSpacing(QApplication::desktop()->screenGeometry().height()/100);
@@ -36,4 +40,12 @@ void MainWindow::changeEvent(QEvent *e)
     default:
         break;
     }
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    this->close();
+    form.show();
+
+
 }
