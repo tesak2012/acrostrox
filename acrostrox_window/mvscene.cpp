@@ -4,12 +4,13 @@
 #include <QGraphicsItem>
 #include <QtCore>
 #include <math.h>
+
 MvScene::MvScene(QObject *parent) : QGraphicsScene(parent)
 {
 
 
-    worker = addEllipse(-10,-10,20,20);
-
+   // worker = addEllipse(0,0,20,20);
+    worker=addPixmap(QPixmap("123.png"));
     //worker->translate(25.5, 25.5);
 	worker->setData(0, "Worker");
     timer=new QTimer(this);
@@ -19,17 +20,16 @@ MvScene::MvScene(QObject *parent) : QGraphicsScene(parent)
 
 void MvScene::timerEvent(QTimerEvent *e)
 {
-
 //worker->setPos(worker->pos().x()+10,worker->pos().y()+10);
     x=worker->pos().x();
     y=worker->pos().y();
-    x1=x-3*sina;
-    y1=y-3*cosa;
-    worker->setPos(x1,y1);
+    x1=x-1*sina;
+    y1=y-1*cosa;
+   worker->setPos(x1,y1);
+//worker->moveBy(-sina,-cosa);
 
-
-   // if(((x1<posx+2)&&(x1>posx-2))&&((y1<posy+2)&&(y1>posy-2)))
-     //   killTimer(tmid);
+    if(((x1<=posx+0.5)&&(x1>=posx-0.5))&&((y1<=posy+0.5)&&(y1>=posy-0.5)))
+        killTimer(tmid);
 
 }
 
@@ -45,30 +45,23 @@ void MvScene::opa()
 
 void MvScene::mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent_press)
 {
-   // timer->stop();
-
-   /* x=worker->pos().x();
+    x=worker->pos().x();
     y=worker->pos().y();
-
-killTimer(tmid);
-    if (mouseEvent->button() == Qt::RightButton)
+    killTimer(tmid);
+    if (mouseEvent_press->button() == Qt::RightButton)
     {
-        posx=mouseEvent->scenePos().x();
-    posy=mouseEvent->scenePos().y();
+        posx=mouseEvent_press->scenePos().x();
+    posy=mouseEvent_press->scenePos().y();
     x1=posx;
     y1=posy;
     sina=(x-x1)/sqrt((x-x1)*(x-x1)+(y-y1)*(y-y1));
-    cosa=(y-y1)/sqrt((x-x1)*(x-x1)+(y-y1)*(y-y1));*/
-    tmid=startTimer(30);
-
-//    if (mouseEvent->button() == Qt::RightButton)
-
-   // timer->start(1000);
-  //  connect(timer,SIGNAL(timeout()),SLOT(opa()));
+    cosa=(y-y1)/sqrt((x-x1)*(x-x1)+(y-y1)*(y-y1));
+    tmid=startTimer(10);
+}
 }
 void MvScene::mouseMoveEvent(QGraphicsSceneMouseEvent* mouseEvent_move)
      {
-    x=worker->pos().x();
+   /* x=worker->pos().x();
     y=worker->pos().y();
 
 //killTimer(tmid);
@@ -79,7 +72,7 @@ void MvScene::mouseMoveEvent(QGraphicsSceneMouseEvent* mouseEvent_move)
     y1=posy;
     sina=(x-x1)/sqrt((x-x1)*(x-x1)+(y-y1)*(y-y1));
     cosa=(y-y1)/sqrt((x-x1)*(x-x1)+(y-y1)*(y-y1));
-  //  tmid=startTimer(30);
+  //  tmid=startTimer(30);*/
 }
 
 void MvScene::keyPressEvent(QKeyEvent * keyEvent)
