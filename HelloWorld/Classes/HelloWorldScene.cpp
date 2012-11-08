@@ -37,7 +37,7 @@ bool HelloWorld::init()
 										"CloseSelected.png",
 										this,
 										menu_selector(HelloWorld::menuCloseCallback) );
-	pCloseItem->setPosition( ccp(CCDirector::sharedDirector()->getWinSize().width - 20, 20) );
+    pCloseItem->setPosition( ccp(CCDirector::sharedDirector()->getWinSize().width - 20, 20) );
 
 	// create menu, it's an autorelease object
 	CCMenu* pMenu = CCMenu::menuWithItems(pCloseItem, NULL);

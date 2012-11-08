@@ -92,7 +92,7 @@ bool AppDelegate::initInstance() {
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_QT)
         CCEGLView * pMainWnd = new CCEGLView();
-        CC_BREAK_IF(! pMainWnd|| ! pMainWnd->Create(480, 320));
+        CC_BREAK_IF(! pMainWnd|| ! pMainWnd->Create(1024, 768));
 #endif
 		bRet = true;
 	} while (0);
